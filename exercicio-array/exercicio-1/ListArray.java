@@ -3,7 +3,7 @@
  * @author Isabel H. Manssour
  */
 
-public class ListArray {
+ public class ListArray {
 
     // Atributos
     private static final int TAM_DEFAULT = 10; //tamanho padrão do arrauy
@@ -119,7 +119,7 @@ public class ListArray {
     /**
      * Retorna a posição na qual está armazenado o valor passado por parâmetro.
      * 
-     * A complexidade deste método é O(?) <-- Preencha
+     * A complexidade deste método é O(n) <-- Preencha
      * @param element O elemento a ser procurado
      * @return A posição do elemento na lista ou -1 caso não esteja na lista.
      */
@@ -132,48 +132,63 @@ public class ListArray {
         }
         return -1;
     }
-
-    
     
     /**
      * Procura e remove o primeiro elemento com valor passado como 
      * parâmetro no array.
      * 
-     * A complexidade deste método é O(?) <-- Preencha
+     * A complexidade deste método é O(n) <-- Preencha
      * @param element o elemento a ser removido
      * @return true caso tenha sido removido, false caso não tenha removido
      */
     public boolean remove(Integer element)
     {
-        return false;
+        int index = indexOf(element); //procura o elemento da lista
+        
+        if (index == -1){
+            return false;  //retorna false se nao for encontrado
+        }
+            
+        for(int i=index; i<count -1; i++){  //remove da lista
+            data[i] = data[i+1];
+        }
+        
+        data[count -1] = null;
+        count --;
+        
+        return true;
     }
 
     /**
      * Substitui o elemento armazenado em uma determinada posicao da lista pelo
      * elemento passado por parametro, retornando o elemento que foi substituido.
      * 
-     * A complexidade deste método é O(?) <-- Preencha
+     * A complexidade deste método é O(n) <-- Preencha
      * @param index a posicao da lista
      * @param element o elemento a ser armazenado na lista
      * @return o elemento armazenado anteriormente na posicao da lista
      * @throws IndexOutOfBoundsException se (index < 0 || index >= size())
      */
     public int set(int index, Integer element) {
-       // Implemente este metodo
-        return -1;
+       if ((index < 0) || (index >= count)) {
+            throw new IndexOutOfBoundsException("Index = " + index);
+        }
+       Integer elementoAntigo = data[index]; //pega o antigo elemento
+       data[index] = element; //substitui por outro elemento
+       
+       return elementoAntigo; //retorna o elemento antigo
     }
 
     /**
      * Procura pelo elemento passado por parametro na lista e retorna true se a 
      * lista contem este elemento.
      * 
-     * A complexidade deste método é O(?) <-- Preencha
+     * A complexidade deste método é O(n) <-- Preencha
      * @param element o elemento a ser procurado
      * @return true se a lista contem o elemento passado por parametro
      */
     public boolean contains(Integer element) {
-       // Implemente este metodo
-        return false;
+        return indexOf(element) != -1;
     }
 
     /**
@@ -181,28 +196,27 @@ public class ListArray {
      * elemento na posição esquerda atribuido na variavel, atribui este elemento
      * na direita e depois na variavel
      * 
-     * A complexidade deste método é O(?) <-- Preencha
+     * A complexidade deste método é O(n) <-- Preencha
      */
     public void reverse()
     {
-        /*
-        int esquerda = 0; //primeiro elemento
-        int direita = count - 1; //pega o tamanho do vetor
+        int inicio = 0; //primeiro elemento
+        int fim = count - 1; //pega o tamanho do vetor
         
-        while (esquerda < direita){
-            Integer variavel = data[esquerda];
-            data[esquerda] = data[direita];
-            data[direita] = variavel;
+        while (inicio < fim){
+            Integer variavel = data[inicio];
+            data[inicio] = data[fim];
+            data[fim] = variavel;
             
-            esquerda++;
-            direita++;
-        }*/
+            inicio++;
+            fim--;
+        }
     }
 
     /**
      * Conta o número de ocorrências do elemento passado como parâmetro na lista, retornando este valor.
      * 
-     * A complexidade deste método é O(?) <-- Preencha
+     * A complexidade deste método é O(n^2) <-- Preencha
      * @param element o elemento que será contado
      * @return número de vezes que o elemento ocorre na lista
      * 
@@ -217,28 +231,72 @@ public class ListArray {
         }
         return ocorrencia;
     }
-
+    
     /**
      * Insere um elemento na lista de forma ordenada (do menor elemento para o maior). 
      * 
-     * A complexidade deste método é O(?) <-- Preencha
+     * A complexidade deste método é O(n^2) <-- Preencha
      * @param element
      * 
      */
-    public void addIncreasingOrder(Integer element)
-    {
-        //Implemente este método
+    public void addIncreasingOrder(Integer element){
+        add(element);
+        
+        for(int  i=0; i<count -1; i++){
+            for(int j=0; j<count -i -1; j++){
+                if(data[j] > data[j+1]){
+                    int temp = data[j];
+                    data[j] = data[j+1];
+                    data[j+1] = temp;
+                }
+            }
+        }
     }
-
+    
     /**
      * Percorre a lista e retira os elementos repetidos,
      * deixando apenas uma ocorrência de cada elemento
      * 
-     * A complexidade deste método é O(?) <-- Preencha
+     * A complexidade deste método é O(n^2) <-- Preencha
      */
     public void unique()
     {
-        //Implemente este método
+        int unico = 0;
+        for (int i=0; i<count; i++){
+            Integer ocorrencia = data[i];
+            boolean duplicado = false;
+            
+            for (int j=0; j<unico; j++){
+                if(data[j].equals(ocorrencia)){
+                    duplicado = true;
+                    break;
+                }
+            }
+            if (!duplicado){
+                data[unico] = ocorrencia;
+                unico++;
+            }
+        }
+        count = unico;
     }
-
+    
+    /**
+     * Instancia duas listas mantendo os elementos ordenados e retorna
+     * uma terceira lista com todos os elementos
+     * 
+     * A complexidade deste método é O(n^2) <-- Preencha
+     */
+    public static ListArray terceiraLista(ListArray lista1, ListArray lista2){
+        ListArray terceiraLista = new ListArray();
+        
+        for(int i=0; i<lista1.size(); i++){
+            terceiraLista.addIncreasingOrder(lista1.get(i)); //usa o metodo de ordenacao para cada elemento da lista
+        }
+        
+        for(int i=0; i<lista2.size(); i++){
+            terceiraLista.addIncreasingOrder(lista2.get(i));
+        }
+        
+        return terceiraLista;
+    }
 }
