@@ -63,7 +63,12 @@ public class LinkedStack implements StackTAD
     
     @Override
     public String toString() {
-    return list.toString();
+        StringBuilder aux = new StringBuilder("|---|\n");
+        for (int i=this.size()-1 ; i>=0 ; i--) {
+            aux = aux.append("| ").append(list.get(i)).append(" |\n");
+        }
+        aux.append("|---|");
+        return aux.toString();
     }
     
 }

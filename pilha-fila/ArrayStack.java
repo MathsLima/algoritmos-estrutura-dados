@@ -100,10 +100,10 @@ public class ArrayStack implements StackTAD
     
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[ ");
-        for (int pos = 0; pos < count; pos++)
-            sb.append(data[pos]).append(" ");
-        sb.append("]");
+        StringBuilder sb = new StringBuilder("|---|\n");
+        for (int pos = count-1; pos >= 0; pos--)
+            sb.append("| ").append(data[pos]).append(" |\n");
+        sb.append("|---|");
         return sb.toString();
     }
     
