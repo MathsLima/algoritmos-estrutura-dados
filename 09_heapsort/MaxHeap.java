@@ -3,6 +3,11 @@ public class MaxHeap {
 
   private int v[];
   private int size;
+  private int contOp;
+
+  public void zeraOp() { contOp = 0;}
+  public int getOp() {return contOp;}
+
 
   public MaxHeap(int tam) {
     size = 1;
@@ -20,12 +25,16 @@ public class MaxHeap {
   private int parent ( int i ) { return i / 2; }
 
   private void swim ( int k ) {
-      while (k>1 && v[k/2]<v[k]) {
-         System.out.println("Swap "+v[k]+" with "+v[k/2]+" "+k);
-         int tmp = v[k];
-         v[k] = v[k/2];
-         v[k/2] = tmp;
-         k = k / 2;
+     // while (k>1 && v[k/2]<v[k]) {
+      while (k>1) {
+         //System.out.println("Swap "+v[k]+" with "+v[k/2]+" "+k);
+        contOp++;
+         if (v[k/2]<v[k]) {
+            int tmp = v[k];
+            v[k] = v[k/2];
+            v[k/2] = tmp;
+            k = k / 2;
+         }
       } 
   }
 
@@ -35,10 +44,11 @@ public class MaxHeap {
     size++;
   }
 
-  private void sink ( int k ) {
-      while (2*k <= size) {
+  private void sink ( int k, int n ) {
+      while (2*k <= n) {
+        contOp++;
          int j = 2*k;
-         if (j < size && v[j]<v[j+1]) j++;
+         if (j < n && v[j]<v[j+1]) j++;
          if (v[k] >= v[j]) break;
          int tmp = v[k];
          v[k] = v[j];
@@ -52,7 +62,7 @@ public class MaxHeap {
       throw new UnsupportedOperationException("MaxHeap vazio!");
     int res = v[1];
     v[1] = v[--size];
-    sink( 1 );
+    sink( 1,size );
     return res;
   }
 
@@ -90,6 +100,24 @@ public class MaxHeap {
   }
 
   public void sort() {
-      // Implemente heapsort!
+    // 1. construção maxheap ( heapfy )
+    int n = size-1;
+    for(int k=n/2; k>=1; k--) {
+      contOp++;
+      sink(k,n);
+    }
+
+   // System.out.println("\ndepois do heapfy\n");
+   // this.print();
+
+    // 2. sortdown
+    while (n > 1) {
+      contOp++;
+      int tmp = v[n];
+      v[n] = v[1];
+      v[1] = tmp;
+      n--;
+      sink(1, n);
+    }
   }
 }
