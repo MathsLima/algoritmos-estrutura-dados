@@ -24,9 +24,10 @@ public class MaxHeap {
   private int right ( int i )  { return 2 * i + 1; }
   private int parent ( int i ) { return i / 2; }
 
+  //metodo para fazer um elemento que nao esteja na ordem subir
   private void swim ( int k ) {
      // while (k>1 && v[k/2]<v[k]) {
-      while (k>1) {
+      while (k>1) {  //enquanto eu nao chegar na raiz
          //System.out.println("Swap "+v[k]+" with "+v[k/2]+" "+k);
         contOp++;
          if (v[k/2]<v[k]) {
